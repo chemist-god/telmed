@@ -3,6 +3,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const connectDB = require('./src/config/db');
 const authRoutes = require('./src/routes/auth');
 const consultationRoutes = require('./src/routes/consultations');
@@ -21,6 +22,9 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
+
+const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 200, message: { message: 'Too many requests, please try again later' } });
+app.use('/api/', apiLimiter);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/consultations', consultationRoutes);

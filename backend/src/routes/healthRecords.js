@@ -41,20 +41,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/:patientId', async (req, res) => {
-  try {
-    // Only the patient themselves or a doctor may view these records
-    if (req.user.role === 'patient' && req.user._id.toString() !== req.params.patientId) {
-      return res.status(403).json({ message: 'Access denied' });
-    }
-    const records = await HealthRecord.find({ patient: req.params.patientId })
-      .populate('patient', '-password')
-      .populate('doctor', '-password')
-      .sort({ recordDate: -1 });
-    res.json(records);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
 module.exports = router;

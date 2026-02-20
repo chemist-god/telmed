@@ -104,7 +104,7 @@ export default function ConsultationChat() {
 
         <div style={styles.messages}>
           {messages.map((msg) => {
-            const isOwn = msg.sender?._id === user?.id || msg.sender?.id === user?.id;
+            const isOwn = String(msg.sender?._id) === String(user?._id);
             return (
               <div key={msg._id} style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={styles.msgBubble(isOwn)}>{msg.content}</div>
